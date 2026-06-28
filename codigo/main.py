@@ -33,7 +33,7 @@ def tratamentoBase(b):
     b.drop(columns=['ID'], inplace=True)
     b.drop(columns=['N_Days'], inplace=True)
 
-    b['Staus_binario'] = b['Status'].apply(lambda x: 1 if x=='D' else 0)
+    b['Multiclass_Status'] = b['Status'].map({'C': 0, 'CL': 1, 'D': 2})
 
     b.drop(columns=['Status'], inplace=True)
         
@@ -117,10 +117,10 @@ def main():
     base = tratamentoBase(base)
 
     #y representa a coluna Status, que eh o que queremos classificar
-    y = base['Staus_binario']
+    y = base['Multiclass_Status']
 
     #retiro da base de dados a coluna Status para iniciar a classificacao
-    X = base.drop('Staus_binario', axis='columns')
+    X = base.drop('Multiclass_Status', axis='columns')
     print(y.head())
 
     base.to_csv(Path(__file__).resolve().parent / "cirrhosis_tratada.csv", index=False)
